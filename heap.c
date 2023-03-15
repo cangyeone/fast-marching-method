@@ -10,9 +10,8 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
-#include "heap.h"
+#include "../include/heap.h"
 #include <stdio.h>
-
 // 堆构建宏
 #define LEFT_CHILD(i)   ((i<<1)+1)
 #define RIGHT_CHILD(i)  ((i<<1)+2)
@@ -54,7 +53,8 @@ void heap_create(heap* h, int initial_size, int (*comp_func)(float, float)){
     h->allocated_size = MIN_MEM_SIZE;
     h->minimum_size = h->allocated_size;
     // 分配内存
-    h->table = (void*)malloc(h->allocated_size);
+    //printf("分配内存c%d\n", h->allocated_size); 
+    h->table = (void*)calloc(h->allocated_size, sizeof(heap_entry));
 }
 
 // 删除堆
@@ -100,7 +100,8 @@ void heap_push(heap *h, float key, mincoord value) {
         // 如果新加元素大于所需内存
         int new_size = h->allocated_size * 2;
         // 分配新内存
-        heap_entry* new_table = malloc(new_size);
+        //printf("分配内存b%d\n", new_size); 
+        heap_entry* new_table = (void*)calloc(new_size, sizeof(heap_entry));
 
         // 复制内存
         memcpy(new_table, h->table, h->allocated_size);
@@ -257,7 +258,8 @@ int heap_pop(heap* h, float* key, mincoord* value) {
         int new_size = h->allocated_size / 2;
 
         // 分配新内存
-        heap_entry* new_table = malloc(new_size);
+        //printf("分配内存a%d\n", new_size); 
+        heap_entry* new_table = (void*)calloc(new_size, sizeof(heap_entry));
 
         // 拷贝
         memcpy(new_table, h->table, used_size);
